@@ -85,12 +85,12 @@ exports.pendingChats = async (req, res) => {
 };
 
 exports.startChat = async (req, res) => {
-  const io = req.socketConfig;
+  const nsp = req.socketConfig.of("/api");
   const { userId, professionalId } = req.body;
   if (!userId || !professionalId) {
     return res.status(400).send("please provide both ids");
   }
-  io.on("connection", (socket) => {
+  nsp.on("connection", (socket) => {
     // console.log("A user connected", socket.id);
     socket.on("disconnect", () => {
       // console.log("A user disconnected");
@@ -98,7 +98,7 @@ exports.startChat = async (req, res) => {
     socket.on(`${userId}-${professionalId}-chat`, (message) => {
       // Broadcast the message to all connected sockets
       // console.log(message);
-      io.emit(`${userId}-${professionalId}-chat`, message);
+      nsp.emit(`${userId}-${professionalId}-chat`, message);
     });
   });
 
@@ -106,9 +106,9 @@ exports.startChat = async (req, res) => {
 };
 
 exports.acceptRequest = async (req, res) => {
-  const io = req.socketConfig;
+  const nsp = req.socketConfig.of("/api");
   const { userId, professionalId } = req.body;
-  io.to(userId).emit("requestAccepted", professionalId);
+  nsp.to(userId).emit("requestAccepted", professionalId);
   acceptedRequests.add(userId);
   // console.log(acceptedRequests);
   res.status(200).json("Your request has been accepted!");
