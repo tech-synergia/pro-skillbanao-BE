@@ -24,6 +24,14 @@ const userSchema = new mongoose.Schema({
   dob: {
     type: String,
     required: [true, "Please provide Date of Birth!"],
+    validate: {
+      validator: function (value) {
+        return validator.isDate(value, {
+          format: "DD-MM-YYYY",
+        });
+      },
+      message: "Please provide a valid Date of Birth!",
+    },
   },
 
   phone: {
