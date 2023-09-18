@@ -61,6 +61,8 @@ const userSchema = new mongoose.Schema({
   },
 
   usedCoupons: Array,
+
+  balance: Number,
 });
 
 userSchema.pre("save", async function (next) {

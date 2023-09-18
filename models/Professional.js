@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const inQueueSchema = new mongoose.Schema({
   userId: String,
   timestamp: Date,
+  description: String,
+  coupon: String,
 });
 
 const professionalSchema = new mongoose.Schema({

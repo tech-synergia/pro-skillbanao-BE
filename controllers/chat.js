@@ -6,10 +6,14 @@ const acceptedRequests = new Set();
 
 exports.addChat = async (req, res) => {
   try {
-    const { userId, professionalId } = req.body;
+    const { userId, professionalId, description, coupon } = req.body;
     const updateResult = await Professional.updateOne(
       { _id: professionalId, "inQueue.userId": { $ne: userId } },
-      { $addToSet: { inQueue: { userId, timestamp: new Date() } } }
+      {
+        $addToSet: {
+          inQueue: { userId, timestamp: new Date(), description, coupon },
+        },
+      }
     );
 
     if (updateResult.modifiedCount === 0) {

@@ -21,4 +21,16 @@ const showCoupons = async (req, res) => {
   res.status(StatusCodes.OK).json({ coupons });
 };
 
-module.exports = { addCoupon, deleteCoupon, showCoupons };
+const validCoupon = async (req, res) => {
+  const { code } = req.params;
+  const coupon = await couponModel
+    .findOne({ code })
+    .select({ minutes: 1, _id: 0 });
+  if (!coupon) {
+    throw new BadRequestError("Coupon isn't valid!");
+  }
+
+  res.status(StatusCodes.OK).json({ msg: "Coupon is valid", coupon });
+};
+
+module.exports = { addCoupon, deleteCoupon, showCoupons, validCoupon };

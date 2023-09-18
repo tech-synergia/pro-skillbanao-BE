@@ -57,6 +57,7 @@ const login = async (req, res) => {
       isVerified: user.isVerified,
       proId: user._id,
       image: user.image,
+      mainRole: user.mainRole,
       token,
     },
   });
